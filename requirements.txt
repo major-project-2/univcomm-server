@@ -1,0 +1,12 @@
+fastapi
+sqlalchemy
+psycopg2
+uvicorn
+pydantic[email]
+pydantic[dotenv]
+python-jose
+passlib
+emails
+python-multipart
+celery
+alembic
