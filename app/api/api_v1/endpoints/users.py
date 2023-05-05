@@ -41,8 +41,15 @@ def create_user(
     if user:
         raise HTTPException(
             status_code=400,
-            detail="The user with this username already exists in the system.",
+            detail="The user with this email already exists in the system.",
         )
+    user = crud.user.get_by_roll_no(db, roll_no=user_in.roll_no)
+    if user:
+        raise HTTPException(
+            status_code=400,
+            detail="The user with this roll number already exists in the system.",
+        )
+    user_in.is_verified = True
     user = crud.user.create(db, obj_in=user_in)
     if settings.EMAILS_ENABLED and user_in.email:
         send_new_account_email(
@@ -90,9 +97,7 @@ def read_user_me(
 def create_user_open(
     *,
     db: Session = Depends(deps.get_db),
-    password: str = Body(...),
-    email: EmailStr = Body(...),
-    full_name: str = Body(None),
+    user_in: schemas.UserCreate,
 ) -> Any:
     """
     Create new user without the need to be logged in.
@@ -102,14 +107,23 @@ def create_user_open(
             status_code=403,
             detail="Open user registration is forbidden on this server",
         )
-    user = crud.user.get_by_email(db, email=email)
+    user = crud.user.get_by_email(db, email=user_in.email)
     if user:
         raise HTTPException(
             status_code=400,
-            detail="The user with this username already exists in the system",
+            detail="The user with this email already exists in the system.",
         )
-    user_in = schemas.UserCreate(password=password, email=email, full_name=full_name)
+    user = crud.user.get_by_roll_no(db, roll_no=user_in.roll_no)
+    if user:
+        raise HTTPException(
+            status_code=400,
+            detail="The user with this roll number already exists in the system.",
+        )
     user = crud.user.create(db, obj_in=user_in)
+    if settings.EMAILS_ENABLED and user_in.email:
+        send_new_account_email(
+            email_to=user_in.email, username=user_in.email, password=user_in.password
+        )
     return user
 
 
