@@ -10,3 +10,5 @@ emails
 python-multipart
 celery
 alembic
+tenacity
+bcrypt
