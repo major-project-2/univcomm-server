@@ -6,12 +6,13 @@ from app.core.security import get_password_hash, verify_password
 from app.crud.base import CRUDBase
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
+from app import crud
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
         return db.query(User).filter(User.email == email).first()
-    
+
     def get_by_roll_no(self, db: Session, *, roll_no: str) -> Optional[User]:
         return db.query(User).filter(User.roll_no == roll_no).first()
 
@@ -54,8 +55,8 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     def is_active(self, user: User) -> bool:
         return user.is_active
 
-    def is_superuser(self, user: User) -> bool:
-        return user.role_id == 0
+    def is_superuser(self, db: Session, *, user: User) -> bool:
+        return crud.role.get_current_user_role(db, user=user).role is 0
 
 
 user = CRUDUser(User)
