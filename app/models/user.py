@@ -24,3 +24,5 @@ class User(Base):
     role_id = Column(Integer, ForeignKey("roles.id"))
     role = relationship("Role", back_populates="users")
     student_data = relationship("User", uselist = False, back_populates="user")
+    faculty_data = relationship("User", uselist = False, back_populates="user")
+    alumni_data = relationship("User", uselist = False, back_populates="user")
