@@ -88,7 +88,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     def is_active(self, user: User) -> bool:
         return user.is_active
 
-    def is_superuser(self, db: Session, *, role: int) -> bool:
+    def is_superuser(self, role: int) -> bool:
         return role == 0
 
 

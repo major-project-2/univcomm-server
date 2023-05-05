@@ -167,7 +167,9 @@ def read_user_by_id(
     user = crud.user.get(db, id=user_id)
     if user == current_user:
         return user
-    if not crud.user.is_superuser(current_user):
+
+    role_obj = crud.role.get_current_user_role(db, user=current_user)
+    if not crud.user.is_superuser(role=role_obj.role):
         raise HTTPException(
             status_code=400, detail="The user doesn't have enough privileges"
         )
@@ -214,6 +216,7 @@ async def verify_user(
     user = crud.user.verify(db, db_obj=user)
     return user
 
+
 @router.patch('/activate/{user_id}')
 async def activate_user(
     *,
@@ -232,6 +235,7 @@ async def activate_user(
         )
     user = crud.user.activate(db, db_obj=user)
     return user
+
 
 @router.patch('/deactivate/{user_id}')
 async def deactivate_user(
