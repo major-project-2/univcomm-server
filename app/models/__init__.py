@@ -6,3 +6,7 @@ from .faculty_data import FacultyData
 from .alumni_data import AlumniData
 from .faculty_experience import FacultyExperience
 from .alumni_experience import AlumniExperience
+from .post import Post
+from .comment import Comment
+from .question import Question
+from .answer import Answer
