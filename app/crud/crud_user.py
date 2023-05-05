@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional, Union, List
 
 from sqlalchemy.orm import Session
 
@@ -15,6 +15,12 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def get_by_roll_no(self, db: Session, *, roll_no: str) -> Optional[User]:
         return db.query(User).filter(User.roll_no == roll_no).first()
+
+    def get_unverified_multi(self, db: Session, *, skip: int, limit: int) -> List[User]:
+        return db.query(User).filter(User.is_verified == False).offset(skip).limit(limit).all()
+
+    def get_inactive_multi(self, db: Session, *, skip: int, limit: int) -> List[User]:
+        return db.query(User).filter(User.is_active == False).offset(skip).limit(limit).all()
 
     def create(self, db: Session, *, obj_in: UserCreate) -> User:
         db_obj = User(
@@ -44,6 +50,33 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             update_data["hashed_password"] = hashed_password
         return super().update(db, db_obj=db_obj, obj_in=update_data)
 
+    def verify(
+        self, db: Session, *, db_obj: User
+    ) -> User:
+        db_obj.is_verified = True
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+    
+    def activate(
+        self, db: Session, *, db_obj: User
+    ) -> User:
+        db_obj.is_active = True
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+    
+    def deactivate(
+        self, db: Session, *, db_obj: User
+    ) -> User:
+        db_obj.is_active = False
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+
     def authenticate(self, db: Session, *, email: str, password: str) -> Optional[User]:
         user = self.get_by_email(db, email=email)
         if not user:
@@ -56,7 +89,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         return user.is_active
 
     def is_superuser(self, db: Session, *, user: User) -> bool:
-        return crud.role.get_current_user_role(db, user=user).role is 0
+        return crud.role.get_current_user_role(db, user=user).role == 0
 
 
 user = CRUDUser(User)

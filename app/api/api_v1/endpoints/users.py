@@ -27,6 +27,34 @@ def read_users(
     return users
 
 
+@router.get("/unverified", response_model=List[schemas.User])
+def read_unverified_users(
+    db: Session = Depends(deps.get_db),
+    skip: int = 0,
+    limit: int = 100,
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Retrieve unverified users.
+    """
+    users = crud.user.get_unverified_multi(db, skip=skip, limit=limit)
+    return users
+
+
+@router.get("/inactive", response_model=List[schemas.User])
+def read_inactive_users(
+    db: Session = Depends(deps.get_db),
+    skip: int = 0,
+    limit: int = 100,
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Retrieve inactive users.
+    """
+    users = crud.user.get_inactive_multi(db, skip=skip, limit=limit)
+    return users
+
+
 @router.post("/", response_model=schemas.User)
 def create_user(
     *,
@@ -164,4 +192,62 @@ def update_user(
             detail="The user with this username does not exist in the system",
         )
     user = crud.user.update(db, db_obj=user, obj_in=user_in)
+    return user
+
+
+@router.patch('/verify/{user_id}')
+async def verify_user(
+    *,
+    db: Session = Depends(deps.get_db),
+    user_id: int,
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Verify a user.
+    """
+    user = crud.user.get(db, id=user_id)
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="The user does not exist in the system",
+        )
+    user = crud.user.verify(db, db_obj=user)
+    return user
+
+@router.patch('/activate/{user_id}')
+async def activate_user(
+    *,
+    db: Session = Depends(deps.get_db),
+    user_id: int,
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Activate a user.
+    """
+    user = crud.user.get(db, id=user_id)
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="The user does not exist in the system",
+        )
+    user = crud.user.activate(db, db_obj=user)
+    return user
+
+@router.patch('/deactivate/{user_id}')
+async def deactivate_user(
+    *,
+    db: Session = Depends(deps.get_db),
+    user_id: int,
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Deactivate a user.
+    """
+    user = crud.user.get(db, id=user_id)
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="The user does not exist in the system",
+        )
+    user = crud.user.deactivate(db, db_obj=user)
     return user
