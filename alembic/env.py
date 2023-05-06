@@ -31,7 +31,6 @@ fileConfig(config.config_file_name)
 # target_metadata = None
 
 from app.db.base import Base  # noqa
-from app.models import Item, User
 
 target_metadata = Base.metadata
 

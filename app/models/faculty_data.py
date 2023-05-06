@@ -11,9 +11,10 @@ if TYPE_CHECKING:
 
 class FacultyData(Base):
     __tablename__ = "faculty_data"
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, primary_key=True)
-    designation = Column(String, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    id = Column(Integer, primary_key=True, index=True,  autoincrement=True, unique=True)
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True, unique=True)
+    designation = Column(String)
     user = relationship("User", back_populates="faculty_data")
     experiences = relationship("FacultyExperience", back_populates="faculty_data")
+
+    

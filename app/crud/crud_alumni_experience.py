@@ -10,7 +10,7 @@ from app.schemas.alumni_experience import AlumniExperienceCreate, AlumniExperien
 
 class CRUDAlumniExperience(CRUDBase[AlumniExperience, AlumniExperienceCreate, AlumniExperienceUpdate]):
     def create_with_user_alumni_data(
-        self, db: Session, *, obj_in: AlumniExperienceCreate, alumni_data_id, alumni_data_user_id: int
+        self, db: Session, *, obj_in: AlumniExperienceCreate, alumni_data_id: int, alumni_data_user_id: int
     ) -> AlumniExperience:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data, alumni_data_id=alumni_data_id,

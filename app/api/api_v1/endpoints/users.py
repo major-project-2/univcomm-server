@@ -260,53 +260,46 @@ def create_alumni_data(
     return alumni_data
 
 
-# @router.post("/data/faculty/experience", response_model=schemas.FacultyExperience)
-# def create_faculty_experience(
-#     *,
-#     db: Session = Depends(deps.get_db),
-#     current_user: models.User = Depends(deps.get_current_active_faculty),
-#     faculty_experience_in: schemas.FacultyExperienceCreate,
-# ) -> Any:
-#     """
-#     Create Faculty experience.
-#     """
-#     if not crud.user.is_verified(current_user):
-#         raise HTTPException(
-#             status_code=400, detail="Kindly verify your user account to create an alumni profile."
-#         )
-#     alumni_data = crud.alumni_data.get_by_user(db, user_id=current_user.id)
-#     if alumni_data:
-#         raise HTTPException(
-#             status_code=400,
-#             detail="The user already has an alumni profile.",
-#         )
-#     alumni_data = crud.alumni_data.create_with_user(
-#         db, obj_in=alumni_data_in, user_id=current_user.id)
-#     return alumni_data
+@router.post("/data/faculty/experience", response_model=schemas.FacultyExperience, dependencies=[Depends(deps.check_verified_user)])
+def create_faculty_experience(
+    *,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_faculty),
+    faculty_experience_in: schemas.FacultyExperienceCreate,
+) -> Any:
+    """
+    Create Faculty experience.
+    """
+    faculty_data = crud.faculty_data.get_by_user(db, user_id=current_user.id)
+    if not faculty_data:
+        raise HTTPException(
+            status_code=400,
+            detail="The user does not have a faculty profile.",
+        )
+    faculty_experience = crud.faculty_experience.create_with_user_faculty_data(db, obj_in=faculty_experience_in, faculty_data_id=faculty_data.id, faculty_data_user_id=faculty_data.user_id
+                                                                               )
+    return faculty_experience
 
-# @router.post("/data/alumni/experience", response_model=schemas.AlumniExperience)
-# def create_alumni_experience(
-#     *,
-#     db: Session = Depends(deps.get_db),
-#     current_user: models.User = Depends(deps.get_current_active_alumni),
-#     alumni_experience_in: schemas.AlumniExperienceCreate,
-# ) -> Any:
-#     """
-#     Create Alumni experience.
-#     """
-#     if not crud.user.is_verified(current_user):
-#         raise HTTPException(
-#             status_code=400, detail="Kindly verify your user account to create an alumni profile."
-#         )
-#     alumni_data = crud.alumni_data.get_by_user(db, user_id=current_user.id)
-#     if alumni_data:
-#         raise HTTPException(
-#             status_code=400,
-#             detail="The user already has an alumni profile.",
-#         )
-#     alumni_data = crud.alumni_data.create_with_user(
-#         db, obj_in=alumni_data_in, user_id=current_user.id)
-#     return alumni_data
+
+@router.post("/data/alumni/experience", response_model=schemas.AlumniExperience, dependencies=[Depends(deps.check_verified_user)])
+def create_alumni_experience(
+    *,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_alumni),
+    alumni_experience_in: schemas.AlumniExperienceCreate,
+) -> Any:
+    """
+    Create Alumni experience.
+    """
+    alumni_data = crud.alumni_data.get_by_user(db, user_id=current_user.id)
+    if not alumni_data:
+        raise HTTPException(
+            status_code=400,
+            detail="The user does not have an alumni profile.",
+        )
+    alumni_experience = crud.alumni_experience.create_with_user_alumni_data(db, obj_in=alumni_experience_in, alumni_data_id=alumni_data.id, alumni_data_user_id=alumni_data.user_id
+                                                                            )
+    return alumni_experience
 
 
 @router.patch('/verify/{user_id}')

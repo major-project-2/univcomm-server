@@ -10,7 +10,7 @@ from app.schemas.faculty_experience import FacultyExperienceCreate, FacultyExper
 
 class CRUDFacultyExperience(CRUDBase[FacultyExperience, FacultyExperienceCreate, FacultyExperienceUpdate]):
     def create_with_user_faculty_data(
-        self, db: Session, *, obj_in: FacultyExperienceCreate, faculty_data_id, faculty_data_user_id: int
+        self, db: Session, *, obj_in: FacultyExperienceCreate, faculty_data_id: int, faculty_data_user_id: int
     ) -> FacultyExperience:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data, faculty_data_id=faculty_data_id,
