@@ -117,7 +117,7 @@ def get_verified_user(
 def check_verified_user(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
-) -> Any:
+):
     if not crud.user.is_verified(user=current_user):
         raise HTTPException(
             status_code=400, detail="Kindly verify your user account."
