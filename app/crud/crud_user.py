@@ -6,7 +6,6 @@ from app.core.security import get_password_hash, verify_password
 from app.crud.base import CRUDBase
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
-from app import crud
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
@@ -58,7 +57,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         db.commit()
         db.refresh(db_obj)
         return db_obj
-    
+
     def activate(
         self, db: Session, *, db_obj: User
     ) -> User:
@@ -67,7 +66,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         db.commit()
         db.refresh(db_obj)
         return db_obj
-    
+
     def deactivate(
         self, db: Session, *, db_obj: User
     ) -> User:
@@ -88,8 +87,20 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     def is_active(self, user: User) -> bool:
         return user.is_active
 
+    def is_verified(self, user: User) -> bool:
+        return user.is_verified
+
     def is_superuser(self, role: int) -> bool:
         return role == 0
+
+    def is_student(self, role: int) -> bool:
+        return role == 2
+
+    def is_faculty(self, role: int) -> bool:
+        return role == 3
+
+    def is_alumni(self, role: int) -> bool:
+        return role == 4
 
 
 user = CRUDUser(User)

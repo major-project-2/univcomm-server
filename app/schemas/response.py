@@ -2,4 +2,4 @@ from pydantic import BaseModel
 
 
 class Response(BaseModel):
-    message: str
+    detail: str

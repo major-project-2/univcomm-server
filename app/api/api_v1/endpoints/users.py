@@ -197,6 +197,97 @@ def update_user(
     return user
 
 
+@router.post("/data/student", response_model=schemas.StudentData)
+def create_student_data(
+    *,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+    student_data_in: schemas.StudentDataCreate,
+) -> Any:
+    """
+    Create Student data.
+    """
+    if not crud.user.is_verified(current_user):
+        raise HTTPException(
+            status_code=400, detail="Kindly verify your user account to create a student profile."
+        )
+    role_obj = crud.role.get_current_user_role(db, user=current_user)
+    if not crud.user.is_student(role=role_obj.role):
+        raise HTTPException(
+            status_code=400, detail="You are not a student."
+        )
+    student_data = crud.student_data.get_by_user(db, user_id=current_user.id)
+    print(student_data)
+    if student_data:
+        raise HTTPException(
+            status_code=400,
+            detail="The user already has a student profile.",
+        )
+    student_data = crud.student_data.create_with_user(
+        db, obj_in=student_data_in, user_id=current_user.id)
+    return student_data
+
+
+@router.post("/data/faculty", response_model=schemas.FacultyData)
+def create_faculty_data(
+    *,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+    faculty_data_in: schemas.FacultyDataCreate,
+) -> Any:
+    """
+    Create Faculty data.
+    """
+    if not crud.user.is_verified(current_user):
+        raise HTTPException(
+            status_code=400, detail="Kindly verify your user account to create a faculty profile."
+        )
+    role_obj = crud.role.get_current_user_role(db, user=current_user)
+    if not crud.user.is_faculty(role=role_obj.role):
+        raise HTTPException(
+            status_code=400, detail="You are not a faculty."
+        )
+    faculty_data = crud.faculty_data.get_by_user(db, user_id=current_user.id)
+    if faculty_data:
+        raise HTTPException(
+            status_code=400,
+            detail="The user already has a faculty profile.",
+        )
+    faculty_data = crud.faculty_data.create_with_user(
+        db, obj_in=faculty_data_in, user_id=current_user.id)
+    return faculty_data
+
+
+@router.post("/data/alumni", response_model=schemas.AlumniData)
+def create_alumni_data(
+    *,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+    alumni_data_in: schemas.AlumniDataCreate,
+) -> Any:
+    """
+    Create Alumni data.
+    """
+    if not crud.user.is_verified(current_user):
+        raise HTTPException(
+            status_code=400, detail="Kindly verify your user account to create an alumni profile."
+        )
+    role_obj = crud.role.get_current_user_role(db, user=current_user)
+    if not crud.user.is_alumni(role=role_obj.role):
+        raise HTTPException(
+            status_code=400, detail="You are not an alumni."
+        )
+    alumni_data = crud.alumni_data.get_by_user(db, user_id=current_user.id)
+    if alumni_data:
+        raise HTTPException(
+            status_code=400,
+            detail="The user already has an alumni profile.",
+        )
+    alumni_data = crud.alumni_data.create_with_user(
+        db, obj_in=alumni_data_in, user_id=current_user.id)
+    return alumni_data
+
+
 @router.patch('/verify/{user_id}')
 async def verify_user(
     *,
