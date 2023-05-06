@@ -12,3 +12,4 @@ celery
 alembic
 tenacity
 bcrypt
+jinja2
