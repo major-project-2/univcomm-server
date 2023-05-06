@@ -201,7 +201,7 @@ def update_user(
 def create_student_data(
     *,
     db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: models.User = Depends(deps.get_current_active_student),
     student_data_in: schemas.StudentDataCreate,
 ) -> Any:
     """
@@ -211,13 +211,7 @@ def create_student_data(
         raise HTTPException(
             status_code=400, detail="Kindly verify your user account to create a student profile."
         )
-    role_obj = crud.role.get_current_user_role(db, user=current_user)
-    if not crud.user.is_student(role=role_obj.role):
-        raise HTTPException(
-            status_code=400, detail="You are not a student."
-        )
     student_data = crud.student_data.get_by_user(db, user_id=current_user.id)
-    print(student_data)
     if student_data:
         raise HTTPException(
             status_code=400,
@@ -232,7 +226,7 @@ def create_student_data(
 def create_faculty_data(
     *,
     db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: models.User = Depends(deps.get_current_active_faculty),
     faculty_data_in: schemas.FacultyDataCreate,
 ) -> Any:
     """
@@ -241,11 +235,6 @@ def create_faculty_data(
     if not crud.user.is_verified(current_user):
         raise HTTPException(
             status_code=400, detail="Kindly verify your user account to create a faculty profile."
-        )
-    role_obj = crud.role.get_current_user_role(db, user=current_user)
-    if not crud.user.is_faculty(role=role_obj.role):
-        raise HTTPException(
-            status_code=400, detail="You are not a faculty."
         )
     faculty_data = crud.faculty_data.get_by_user(db, user_id=current_user.id)
     if faculty_data:
@@ -262,7 +251,7 @@ def create_faculty_data(
 def create_alumni_data(
     *,
     db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: models.User = Depends(deps.get_current_active_alumni),
     alumni_data_in: schemas.AlumniDataCreate,
 ) -> Any:
     """
@@ -271,11 +260,6 @@ def create_alumni_data(
     if not crud.user.is_verified(current_user):
         raise HTTPException(
             status_code=400, detail="Kindly verify your user account to create an alumni profile."
-        )
-    role_obj = crud.role.get_current_user_role(db, user=current_user)
-    if not crud.user.is_alumni(role=role_obj.role):
-        raise HTTPException(
-            status_code=400, detail="You are not an alumni."
         )
     alumni_data = crud.alumni_data.get_by_user(db, user_id=current_user.id)
     if alumni_data:

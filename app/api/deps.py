@@ -62,3 +62,42 @@ def get_current_active_superuser(
             status_code=400, detail="The user doesn't have enough privileges"
         )
     return current_user
+
+
+def get_current_active_student(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+) -> models.User:
+    role_obj = crud.role.get_current_user_role(db, user=current_user)
+
+    if not crud.user.is_student(role=role_obj.role):
+        raise HTTPException(
+            status_code=400, detail="The user doesn't have enough privileges"
+        )
+    return current_user
+
+
+def get_current_active_faculty(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+) -> models.User:
+    role_obj = crud.role.get_current_user_role(db, user=current_user)
+
+    if not crud.user.is_faculty(role=role_obj.role):
+        raise HTTPException(
+            status_code=400, detail="The user doesn't have enough privileges"
+        )
+    return current_user
+
+
+def get_current_active_alumni(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+) -> models.User:
+    role_obj = crud.role.get_current_user_role(db, user=current_user)
+
+    if not crud.user.is_alumni(role=role_obj.role):
+        raise HTTPException(
+            status_code=400, detail="The user doesn't have enough privileges"
+        )
+    return current_user
