@@ -1,5 +1,7 @@
 from typing import Optional
 
+from datetime import date
+
 from pydantic import BaseModel
 
 
@@ -29,10 +31,9 @@ class FacultyExperienceInDBBase(FacultyExperienceBase):
     id: int
     department: str
     organization: str
-    start_date: str
-    end_date: str
+    start_date: date
+    end_date: date
     faculty_data_id: int
-    faculty_data_user_id: int
 
     class Config:
         orm_mode = True

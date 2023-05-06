@@ -11,13 +11,13 @@ if TYPE_CHECKING:
 
 class FacultyExperience(Base):
     __tablename__ = "faculty_experiences"
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, index=True)
     department = Column(String)
     organization = Column(String)
     start_date = Column(Date)
     end_date = Column(Date)
-    faculty_data_id = Column(Integer, ForeignKey("faculty_data.id"), primary_key=True)
-    faculty_data_user_id = Column(Integer,  ForeignKey(
-        "faculty_data.user_id"), primary_key=True)
+
+    faculty_data_id = Column(Integer, ForeignKey("faculty_data.id"))
+
     faculty_data = relationship(
-        "FacultyData", backref=backref("experiences"), foreign_keys=[faculty_data_id])
+        "FacultyData", back_populates="experiences")

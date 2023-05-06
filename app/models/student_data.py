@@ -11,9 +11,11 @@ if TYPE_CHECKING:
 
 class StudentData(Base):
     __tablename__ = "student_data"
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True, unique=True)
+    id = Column(Integer, primary_key=True, index=True)
     branch = Column(String)
     semester = Column(String)
     department = Column(String)
+
+    user_id = Column(Integer, ForeignKey("users.id"))
+
     user = relationship("User", back_populates="student_data")

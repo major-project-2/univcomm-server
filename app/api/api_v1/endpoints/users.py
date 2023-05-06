@@ -260,12 +260,12 @@ def create_alumni_data(
     return alumni_data
 
 
-@router.post("/data/faculty/experience", response_model=schemas.FacultyExperience, dependencies=[Depends(deps.check_verified_user)])
+@router.post("/data/faculty/experience", response_model=schemas.AlumniExperience, dependencies=[Depends(deps.check_verified_user)])
 def create_faculty_experience(
     *,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_faculty),
-    faculty_experience_in: schemas.FacultyExperienceCreate,
+    faculty_experience_in: schemas.AlumniExperienceCreate,
 ) -> Any:
     """
     Create Faculty experience.
@@ -276,8 +276,9 @@ def create_faculty_experience(
             status_code=400,
             detail="The user does not have a faculty profile.",
         )
-    faculty_experience = crud.faculty_experience.create_with_user_faculty_data(db, obj_in=faculty_experience_in, faculty_data_id=faculty_data.id, faculty_data_user_id=faculty_data.user_id
-                                                                               )
+    faculty_experience = crud.faculty_experience.create_with_faculty_data(db, obj_in=faculty_experience_in, faculty_data_id=faculty_data.id
+                                                                          )
+
     return faculty_experience
 
 
@@ -297,8 +298,9 @@ def create_alumni_experience(
             status_code=400,
             detail="The user does not have an alumni profile.",
         )
-    alumni_experience = crud.alumni_experience.create_with_user_alumni_data(db, obj_in=alumni_experience_in, alumni_data_id=alumni_data.id, alumni_data_user_id=alumni_data.user_id
-                                                                            )
+    alumni_experience = crud.alumni_experience.create_with_alumni_data(db, obj_in=alumni_experience_in, alumni_data_id=alumni_data.id
+                                                                       )
+
     return alumni_experience
 
 
