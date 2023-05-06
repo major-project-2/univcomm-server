@@ -197,7 +197,7 @@ def update_user(
     return user
 
 
-@router.post("/data/student", response_model=schemas.StudentData)
+@router.post("/data/student", response_model=schemas.StudentData, dependencies=[Depends(deps.check_verified_user)])
 def create_student_data(
     *,
     db: Session = Depends(deps.get_db),
@@ -207,10 +207,6 @@ def create_student_data(
     """
     Create Student data.
     """
-    if not crud.user.is_verified(current_user):
-        raise HTTPException(
-            status_code=400, detail="Kindly verify your user account to create a student profile."
-        )
     student_data = crud.student_data.get_by_user(db, user_id=current_user.id)
     if student_data:
         raise HTTPException(
@@ -222,7 +218,7 @@ def create_student_data(
     return student_data
 
 
-@router.post("/data/faculty", response_model=schemas.FacultyData)
+@router.post("/data/faculty", response_model=schemas.FacultyData, dependencies=[Depends(deps.check_verified_user)])
 def create_faculty_data(
     *,
     db: Session = Depends(deps.get_db),
@@ -232,10 +228,6 @@ def create_faculty_data(
     """
     Create Faculty data.
     """
-    if not crud.user.is_verified(current_user):
-        raise HTTPException(
-            status_code=400, detail="Kindly verify your user account to create a faculty profile."
-        )
     faculty_data = crud.faculty_data.get_by_user(db, user_id=current_user.id)
     if faculty_data:
         raise HTTPException(
@@ -247,7 +239,7 @@ def create_faculty_data(
     return faculty_data
 
 
-@router.post("/data/alumni", response_model=schemas.AlumniData)
+@router.post("/data/alumni", response_model=schemas.AlumniData, dependencies=[Depends(deps.check_verified_user)])
 def create_alumni_data(
     *,
     db: Session = Depends(deps.get_db),
@@ -257,10 +249,6 @@ def create_alumni_data(
     """
     Create Alumni data.
     """
-    if not crud.user.is_verified(current_user):
-        raise HTTPException(
-            status_code=400, detail="Kindly verify your user account to create an alumni profile."
-        )
     alumni_data = crud.alumni_data.get_by_user(db, user_id=current_user.id)
     if alumni_data:
         raise HTTPException(
@@ -270,6 +258,55 @@ def create_alumni_data(
     alumni_data = crud.alumni_data.create_with_user(
         db, obj_in=alumni_data_in, user_id=current_user.id)
     return alumni_data
+
+
+# @router.post("/data/faculty/experience", response_model=schemas.FacultyExperience)
+# def create_faculty_experience(
+#     *,
+#     db: Session = Depends(deps.get_db),
+#     current_user: models.User = Depends(deps.get_current_active_faculty),
+#     faculty_experience_in: schemas.FacultyExperienceCreate,
+# ) -> Any:
+#     """
+#     Create Faculty experience.
+#     """
+#     if not crud.user.is_verified(current_user):
+#         raise HTTPException(
+#             status_code=400, detail="Kindly verify your user account to create an alumni profile."
+#         )
+#     alumni_data = crud.alumni_data.get_by_user(db, user_id=current_user.id)
+#     if alumni_data:
+#         raise HTTPException(
+#             status_code=400,
+#             detail="The user already has an alumni profile.",
+#         )
+#     alumni_data = crud.alumni_data.create_with_user(
+#         db, obj_in=alumni_data_in, user_id=current_user.id)
+#     return alumni_data
+
+# @router.post("/data/alumni/experience", response_model=schemas.AlumniExperience)
+# def create_alumni_experience(
+#     *,
+#     db: Session = Depends(deps.get_db),
+#     current_user: models.User = Depends(deps.get_current_active_alumni),
+#     alumni_experience_in: schemas.AlumniExperienceCreate,
+# ) -> Any:
+#     """
+#     Create Alumni experience.
+#     """
+#     if not crud.user.is_verified(current_user):
+#         raise HTTPException(
+#             status_code=400, detail="Kindly verify your user account to create an alumni profile."
+#         )
+#     alumni_data = crud.alumni_data.get_by_user(db, user_id=current_user.id)
+#     if alumni_data:
+#         raise HTTPException(
+#             status_code=400,
+#             detail="The user already has an alumni profile.",
+#         )
+#     alumni_data = crud.alumni_data.create_with_user(
+#         db, obj_in=alumni_data_in, user_id=current_user.id)
+#     return alumni_data
 
 
 @router.patch('/verify/{user_id}')

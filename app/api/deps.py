@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Generator, Any
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -101,3 +101,24 @@ def get_current_active_alumni(
             status_code=400, detail="The user doesn't have enough privileges"
         )
     return current_user
+
+
+def get_verified_user(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+) -> models.User:
+    if not crud.user.is_verified(user=current_user):
+        raise HTTPException(
+            status_code=400, detail="Kindly verify your user account."
+        )
+    return current_user
+
+
+def check_verified_user(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+) -> Any:
+    if not crud.user.is_verified(user=current_user):
+        raise HTTPException(
+            status_code=400, detail="Kindly verify your user account."
+        )
