@@ -33,6 +33,6 @@ class FacultyData(FacultyDataInDBBase):
     pass
 
 
-# Properties properties stored in DB
+# Properties stored in DB
 class FacultyDataInDB(FacultyDataInDBBase):
     pass

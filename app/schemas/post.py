@@ -4,36 +4,38 @@ from pydantic import BaseModel
 
 
 # Shared properties
-class ItemBase(BaseModel):
+class PostBase(BaseModel):
     title: Optional[str] = None
-    description: Optional[str] = None
+    content: Optional[str] = None
 
 
-# Properties to receive on item creation
-class ItemCreate(ItemBase):
+# Properties to receive on post creation
+class PostCreate(PostBase):
     title: str
+    content: str
 
 
-# Properties to receive on item update
-class ItemUpdate(ItemBase):
+# Properties to receive on post update
+class PostUpdate(PostBase):
     pass
 
 
 # Properties shared by models stored in DB
-class ItemInDBBase(ItemBase):
+class PostInDBBase(PostBase):
     id: int
     title: str
-    owner_id: int
+    content: str
+    user_id: int
 
     class Config:
         orm_mode = True
 
 
 # Properties to return to client
-class Item(ItemInDBBase):
+class Post(PostInDBBase):
     pass
 
 
 # Properties stored in DB
-class ItemInDB(ItemInDBBase):
+class PostInDB(PostInDBBase):
     pass

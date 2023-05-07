@@ -39,6 +39,6 @@ class AlumniData(AlumniDataInDBBase):
     pass
 
 
-# Properties properties stored in DB
+# Properties stored in DB
 class AlumniDataInDB(AlumniDataInDBBase):
     pass

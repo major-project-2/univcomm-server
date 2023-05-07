@@ -44,6 +44,6 @@ class FacultyExperience(FacultyExperienceInDBBase):
     pass
 
 
-# Properties properties stored in DB
+# Properties stored in DB
 class FacultyExperienceInDB(FacultyExperienceInDBBase):
     pass

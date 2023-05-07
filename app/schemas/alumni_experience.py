@@ -44,6 +44,6 @@ class AlumniExperience(AlumniExperienceInDBBase):
     pass
 
 
-# Properties properties stored in DB
+# Properties stored in DB
 class AlumniExperienceInDB(AlumniExperienceInDBBase):
     pass

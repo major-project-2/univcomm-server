@@ -40,6 +40,6 @@ class StudentData(StudentDataInDBBase):
     pass
 
 
-# Properties properties stored in DB
+# Properties stored in DB
 class StudentDataInDB(StudentDataInDBBase):
     pass

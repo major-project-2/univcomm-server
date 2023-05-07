@@ -72,7 +72,7 @@ def test_token(current_user: models.User = Depends(deps.get_current_user)) -> An
     return current_user
 
 
-@router.post("/password-recovery/{email}", response_model=schemas.Msg)
+@router.post("/password-recovery/{email}", response_model=schemas.Response)
 def recover_password(email: str, db: Session = Depends(deps.get_db)) -> Any:
     """
     Password Recovery
@@ -88,10 +88,10 @@ def recover_password(email: str, db: Session = Depends(deps.get_db)) -> Any:
     send_reset_password_email(
         email_to=user.email, email=email, token=password_reset_token
     )
-    return {"msg": "Password recovery email sent"}
+    return {"detail": "Password recovery email sent"}
 
 
-@router.post("/reset-password/", response_model=schemas.Msg)
+@router.post("/reset-password/", response_model=schemas.Response)
 def reset_password(
     token: str = Body(...),
     new_password: str = Body(...),
@@ -115,4 +115,4 @@ def reset_password(
     user.hashed_password = hashed_password
     db.add(user)
     db.commit()
-    return {"msg": "Password updated successfully"}
+    return {"detail": "Password updated successfully"}
