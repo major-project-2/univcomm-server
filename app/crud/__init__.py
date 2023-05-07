@@ -6,6 +6,10 @@ from .crud_faculty_data import faculty_data
 from .crud_alumni_data import alumni_data
 from .crud_faculty_experience import faculty_experience
 from .crud_alumni_experience import alumni_experience
+from .crud_post import post
+from .crud_comment import comment
+from .crud_question import question
+from .crud_answer import answer
 
 # For a new basic set of CRUD operations you could just do
 
