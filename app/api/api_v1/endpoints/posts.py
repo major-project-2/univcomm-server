@@ -106,3 +106,82 @@ def delete_post(
 
     post = crud.post.remove(db=db, id=id)
     return post
+
+
+# @router.post("/{id}/comments/{comment_id}", response_model=schemas.Comment, dependencies=[Depends(deps.check_verified_user)])
+# def create_comment(
+#     *,
+#     db: Session = Depends(deps.get_db),
+#     comment_in: schemas.CommentCreate,
+#     current_user: models.User = Depends(deps.get_current_active_user),
+# ) -> Any:
+#     """
+#     Create new comment.
+#     """
+#     post = crud.post.create_with_user(db=db, obj_in=post_in, user_id=current_user.id)
+#     return post
+
+
+# @router.put("/{id}", response_model=schemas.Post, dependencies=[Depends(deps.check_verified_user)])
+# def update_post(
+#     *,
+#     db: Session = Depends(deps.get_db),
+#     id: int,
+#     post_in: schemas.PostUpdate,
+#     current_user: models.User = Depends(deps.get_current_active_user),
+# ) -> Any:
+#     """
+#     Update a post.
+#     """
+#     post = crud.post.get(db=db, id=id)
+#     if not post:
+#         raise HTTPException(status_code=404, detail="Post not found")
+
+#     if post.user_id != current_user.id:
+#         raise HTTPException(status_code=400, detail="Not enough permissions")
+
+#     post = crud.post.update(db=db, db_obj=post, obj_in=post_in)
+#     return post
+
+
+# @router.get("/{id}", response_model=schemas.Post, dependencies=[Depends(deps.check_verified_user)])
+# def read_post(
+#     *,
+#     db: Session = Depends(deps.get_db),
+#     id: int,
+#     current_user: models.User = Depends(deps.get_current_active_user),
+# ) -> Any:
+#     """
+#     Get post by ID.
+#     """
+#     post = crud.post.get(db=db, id=id)
+#     if not post:
+#         raise HTTPException(status_code=404, detail="Post not found")
+
+#     role_obj = crud.role.get_current_user_role(db, user=current_user)
+#     if not crud.user.is_superuser(role=role_obj.role) and (post.user_id != current_user.id):
+#         raise HTTPException(status_code=400, detail="Not enough permissions")
+
+#     return post
+
+
+# @router.delete("/{id}", response_model=schemas.Post, dependencies=[Depends(deps.check_verified_user)])
+# def delete_post(
+#     *,
+#     db: Session = Depends(deps.get_db),
+#     id: int,
+#     current_user: models.User = Depends(deps.get_current_active_user),
+# ) -> Any:
+#     """
+#     Delete a post.
+#     """
+#     post = crud.post.get(db=db, id=id)
+#     if not post:
+#         raise HTTPException(status_code=404, detail="Post not found")
+
+#     role_obj = crud.role.get_current_user_role(db, user=current_user)
+#     if not crud.user.is_superuser(role=role_obj.role) and (post.user_id != current_user.id):
+#         raise HTTPException(status_code=400, detail="Not enough permissions")
+
+#     post = crud.post.remove(db=db, id=id)
+#     return post

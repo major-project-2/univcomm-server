@@ -23,6 +23,7 @@ class CommentInDBBase(CommentBase):
     id: int
     comment: str
     post_id: int
+    user_id: int
 
     class Config:
         orm_mode = True

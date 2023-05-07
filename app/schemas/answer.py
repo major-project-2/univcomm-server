@@ -23,6 +23,7 @@ class AnswerInDBBase(AnswerBase):
     id: int
     answer: str
     question_id: int
+    user_id: int
 
     class Config:
         orm_mode = True

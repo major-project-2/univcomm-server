@@ -32,3 +32,5 @@ class User(Base):
     alumni_data = relationship("AlumniData", uselist=False, back_populates="user")
     posts = relationship("Post", back_populates="user")
     questions = relationship("Question", back_populates="user")
+    comments = relationship("Comment", back_populates="user")
+    answers = relationship("Answer", back_populates="user")

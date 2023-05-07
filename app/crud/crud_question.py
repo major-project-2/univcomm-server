@@ -30,5 +30,10 @@ class CRUDQuestion(CRUDBase[Question, QuestionCreate, QuestionUpdate]):
             .all()
         )
 
+    def get_by_user(
+            self, db: Session, *, user_id: int
+    ) -> Question:
+        return db.query(self.model).filter(Question.user_id == user_id).first()
+
 
 question = CRUDQuestion(Question)

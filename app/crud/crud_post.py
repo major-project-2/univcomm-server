@@ -30,5 +30,10 @@ class CRUDPost(CRUDBase[Post, PostCreate, PostUpdate]):
             .all()
         )
 
+    def get_by_user(
+            self, db: Session, *, user_id: int
+    ) -> Post:
+        return db.query(self.model).filter(Post.user_id == user_id).first()
+
 
 post = CRUDPost(Post)
