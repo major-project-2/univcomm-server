@@ -9,3 +9,7 @@ from .faculty_data import FacultyData, FacultyDataCreate, FacultyDataInDB, Facul
 from .alumni_data import AlumniData, AlumniDataCreate, AlumniDataInDB, AlumniDataUpdate
 from .faculty_experience import FacultyExperience, FacultyExperienceCreate, FacultyExperienceInDB, FacultyExperienceUpdate
 from .alumni_experience import AlumniExperience, AlumniExperienceCreate, AlumniExperienceInDB, AlumniExperienceUpdate
+from .post import Post, PostCreate, PostInDB, PostUpdate
+from .comment import Comment, CommentCreate, CommentInDB, CommentUpdate
+from .question import Question, QuestionCreate, QuestionInDB, QuestionUpdate
+from .answer import Answer, AnswerCreate, AnswerInDB, AnswerUpdate
