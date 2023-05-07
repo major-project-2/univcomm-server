@@ -13,3 +13,5 @@ alembic
 tenacity
 bcrypt
 jinja2
+pytest
+httpx
