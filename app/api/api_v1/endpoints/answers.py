@@ -36,15 +36,18 @@ def read_answers(
 def create_answer(
     *,
     db: Session = Depends(deps.get_db),
-    answer_id: int,
+    question_id: int,
     answer_in: schemas.AnswerCreate,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Create new answer.
     """
+    question = crud.question.get(db, id=question_id)
+    if not question:
+        raise HTTPException(status_code=404, detail="Question not found")
     answer = crud.answer.create_with_question_user(
-        db=db, obj_in=answer_in, answer_id=answer_id, user_id=current_user.id)
+        db=db, obj_in=answer_in, question_id=question_id, user_id=current_user.id)
     return answer
 
 

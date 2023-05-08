@@ -42,6 +42,9 @@ def create_comment(
     """
     Create new comment.
     """
+    post = crud.post.get(db, id=post_id)
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
     comment = crud.comment.create_with_post_user(
         db=db, obj_in=comment_in, post_id=post_id, user_id=current_user.id)
     return comment
