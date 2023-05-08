@@ -19,12 +19,24 @@ class CRUDAnswer(CRUDBase[Answer, AnswerCreate, AnswerUpdate]):
         db.refresh(db_obj)
         return db_obj
 
-    def get_multi_by_question(
+    def get_multi(
         self, db: Session, *, question_id: int, skip: int = 0, limit: int = 100
     ) -> List[Answer]:
         return (
             db.query(self.model)
             .filter(Answer.question_id == question_id)
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
+
+    def get_multi_by_user(
+        self, db: Session, *, question_id: int, user_id: int, skip: int = 0, limit: int = 100
+    ) -> List[Answer]:
+        return (
+            db.query(self.model)
+            .filter(Answer.question_id == question_id)
+            .filter(Answer.user_id == user_id)
             .offset(skip)
             .limit(limit)
             .all()
