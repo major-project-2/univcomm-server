@@ -9,11 +9,11 @@ from app.schemas.answer import AnswerCreate, AnswerUpdate
 
 
 class CRUDAnswer(CRUDBase[Answer, AnswerCreate, AnswerUpdate]):
-    def create_with_question(
+    def create_with_question_user(
         self, db: Session, *, obj_in: AnswerCreate, question_id: int, user_id: int
     ) -> Answer:
         obj_in_data = jsonable_encoder(obj_in)
-        db_obj = self.model(**obj_in_data, question_id=question_id)
+        db_obj = self.model(**obj_in_data, question_id=question_id, user_id=user_id)
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
