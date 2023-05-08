@@ -17,4 +17,5 @@ class FacultyData(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
 
     user = relationship("User", back_populates="faculty_data")
-    experiences = relationship("FacultyExperience", back_populates="faculty_data")
+    experiences = relationship(
+        "FacultyExperience", back_populates="faculty_data", cascade="all, delete")

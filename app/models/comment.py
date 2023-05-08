@@ -15,7 +15,7 @@ class Comment(Base):
     id = Column(Integer, primary_key=True, index=True)
     comment = Column(String)
 
-    post_id = Column(Integer, ForeignKey("posts.id"))
+    post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"))
     user_id = Column(Integer, ForeignKey("users.id"))
 
     post = relationship("Post", back_populates="comments")

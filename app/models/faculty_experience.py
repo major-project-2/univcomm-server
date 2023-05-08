@@ -17,7 +17,7 @@ class FacultyExperience(Base):
     start_date = Column(Date)
     end_date = Column(Date)
 
-    faculty_data_id = Column(Integer, ForeignKey("faculty_data.id"))
+    faculty_data_id = Column(Integer, ForeignKey("faculty_data.id", ondelete="CASCADE"))
 
     faculty_data = relationship(
         "FacultyData", back_populates="experiences")

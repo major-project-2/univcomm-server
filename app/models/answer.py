@@ -15,7 +15,7 @@ class Answer(Base):
     id = Column(Integer, primary_key=True, index=True)
     answer = Column(String)
 
-    question_id = Column(Integer, ForeignKey("questions.id"))
+    question_id = Column(Integer, ForeignKey("questions.id", ondelete="CASCADE"))
     user_id = Column(Integer, ForeignKey("users.id"))
 
     question = relationship("Question", back_populates="answers")

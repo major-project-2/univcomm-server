@@ -9,100 +9,107 @@ from app.api import deps
 router = APIRouter()
 
 
-@router.get("/", response_model=List[schemas.Post], dependencies=[Depends(deps.check_verified_user)])
-def read_posts(
+@router.get("/", response_model=List[schemas.Comment], dependencies=[Depends(deps.check_verified_user)])
+def read_comments(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
+    *,
+    post_id: int,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Retrieve posts.
+    Retrieve comments.
     """
     role_obj = crud.role.get_current_user_role(db, user=current_user)
     if crud.user.is_superuser(role=role_obj.role):
-        posts = crud.post.get_multi(db, skip=skip, limit=limit)
+        comments = crud.comment.get_multi(db, post_id=post_id, skip=skip, limit=limit)
     else:
-        posts = crud.post.get_multi_by_user(
-            db=db, user_id=current_user.id, skip=skip, limit=limit
+        comments = crud.comment.get_multi_by_user(
+            db=db, post_id=post_id, user_id=current_user.id, skip=skip, limit=limit
         )
-    return posts
+    return comments
 
 
-@router.post("/", response_model=schemas.Post, dependencies=[Depends(deps.check_verified_user)])
-def create_post(
+@router.post("/", response_model=schemas.Comment, dependencies=[Depends(deps.check_verified_user)])
+def create_comment(
     *,
     db: Session = Depends(deps.get_db),
-    post_in: schemas.PostCreate,
+    post_id: int,
+    comment_in: schemas.CommentCreate,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Create new post.
+    Create new comment.
     """
-    post = crud.post.create_with_user(db=db, obj_in=post_in, user_id=current_user.id)
-    return post
+    comment = crud.comment.create_with_post_user(
+        db=db, obj_in=comment_in, post_id=post_id, user_id=current_user.id)
+    return comment
 
 
-@router.put("/{id}", response_model=schemas.Post, dependencies=[Depends(deps.check_verified_user)])
-def update_post(
+@router.put("/{id}", response_model=schemas.Comment, dependencies=[Depends(deps.check_verified_user)])
+def update_comment(
     *,
     db: Session = Depends(deps.get_db),
+    post_id: int,
     id: int,
-    post_in: schemas.PostUpdate,
+    comment_in: schemas.CommentUpdate,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Update a post.
+    Update a comment.
     """
-    post = crud.post.get(db=db, id=id)
-    if not post:
-        raise HTTPException(status_code=404, detail="Post not found")
+    comment = crud.comment.get(db=db, id=id)
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
 
-    if post.user_id != current_user.id:
+    if comment.user_id != current_user.id:
         raise HTTPException(status_code=400, detail="Not enough permissions")
 
-    post = crud.post.update(db=db, db_obj=post, obj_in=post_in)
-    return post
+    comment = crud.comment.update(db=db, db_obj=comment, obj_in=comment_in)
+    return comment
 
 
-@router.get("/{id}", response_model=schemas.Post, dependencies=[Depends(deps.check_verified_user)])
-def read_post(
+@router.get("/{id}", response_model=schemas.Comment, dependencies=[Depends(deps.check_verified_user)])
+def read_comment(
     *,
     db: Session = Depends(deps.get_db),
+    post_id: int,
     id: int,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Get post by ID.
+    Get comment by ID.
     """
-    post = crud.post.get(db=db, id=id)
-    if not post:
-        raise HTTPException(status_code=404, detail="Post not found")
+    comment = crud.comment.get(db=db, id=id)
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
 
     role_obj = crud.role.get_current_user_role(db, user=current_user)
-    if not crud.user.is_superuser(role=role_obj.role) and (post.user_id != current_user.id):
+    if not crud.user.is_superuser(role=role_obj.role) and (comment.user_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
 
-    return post
+    return comment
 
 
-@router.delete("/{id}", response_model=schemas.Post, dependencies=[Depends(deps.check_verified_user)])
-def delete_post(
+@router.delete("/{id}", response_model=schemas.Comment, dependencies=[Depends(deps.check_verified_user)])
+def delete_comment(
     *,
     db: Session = Depends(deps.get_db),
+    post_id: int,
     id: int,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Delete a post.
+    Delete a comment.
     """
-    post = crud.post.get(db=db, id=id)
-    if not post:
-        raise HTTPException(status_code=404, detail="Post not found")
+    comment = crud.comment.get(db=db, id=id)
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
 
     role_obj = crud.role.get_current_user_role(db, user=current_user)
-    if not crud.user.is_superuser(role=role_obj.role) and (post.user_id != current_user.id):
+    if not crud.user.is_superuser(role=role_obj.role) and (comment.user_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
 
-    post = crud.post.remove(db=db, id=id)
-    return post
+    comment = crud.comment.remove(db=db, id=id)
+    return comment
