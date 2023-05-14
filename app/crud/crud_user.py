@@ -1,5 +1,7 @@
 from typing import Any, Dict, Optional, Union, List
 
+from app import constants
+
 from sqlalchemy.orm import Session
 
 from app.core.security import get_password_hash, verify_password
@@ -91,16 +93,16 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         return user.is_verified
 
     def is_superuser(self, role: int) -> bool:
-        return role == 0
+        return role == constants.ACTOR_SUPERUSER
 
     def is_student(self, role: int) -> bool:
-        return role == 2
+        return role == constants.ACTOR_STUDENT
 
     def is_faculty(self, role: int) -> bool:
-        return role == 3
+        return role == constants.ACTOR_FACULTY
 
     def is_alumni(self, role: int) -> bool:
-        return role == 4
+        return role == constants.ACTOR_ALUMNI
 
 
 user = CRUDUser(User)

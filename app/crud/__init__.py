@@ -13,7 +13,7 @@ from .crud_answer import answer
 # For a new basic set of CRUD operations you could just do
 
 # from .base import CRUDBase
-# from app.models.item import Item
-# from app.schemas.item import ItemCreate, ItemUpdate
+# from app.models.post import Post
+# from app.schemas.post import PostCreate, PostUpdate
 
-# item = CRUDBase[Item, ItemCreate, ItemUpdate](Item)
+# post = CRUDBase[Post, PostCreate, PostUpdate]

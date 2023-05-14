@@ -49,7 +49,6 @@ class Settings(BaseSettings):
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
 
-    SMTP_TLS: bool = True
     SMTP_PORT: Optional[int] = None
     SMTP_HOST: Optional[str] = None
     SMTP_USER: Optional[str] = None
@@ -64,21 +63,39 @@ class Settings(BaseSettings):
         return v
 
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
-    EMAIL_TEMPLATES_DIR: str = "/app/app/email-templates/build"
+    EMAIL_TEMPLATES_DIR: str = "app/email-templates/build"
     EMAILS_ENABLED: bool = False
 
-    @validator("EMAILS_ENABLED", pre=True)
-    def get_emails_enabled(cls, v: bool, values: Dict[str, Any]) -> bool:
-        return bool(
-            values.get("SMTP_HOST")
-            and values.get("SMTP_PORT")
-            and values.get("EMAILS_FROM_EMAIL")
-        )
+    # @validator("EMAILS_ENABLED", pre=True)
+    # def get_emails_enabled(cls, v: bool, values: Dict[str, Any]) -> bool:
+    #     return bool(
+    #         values.get("SMTP_HOST")
+    #         and values.get("SMTP_PORT")
+    #         and values.get("EMAILS_FROM_EMAIL")
+    #     )
+    SMTP_SERVER_HOST: Optional[str] = None
+    SMTP_SERVER_PORT: Optional[int] = None
+    SENDER_NAME: Optional[str] = None
+    SENDER_ADDRESS: Optional[str] = None
+    SENDER_PASSWORD: Optional[str] = ""
+
+    # @validator("EMAILS_ENABLED", pre=True)
+    # def get_emails_enabled(cls, v: bool, values: Dict[str, Any]) -> bool:
+    #     print(
+    #         values.get("SMTP_SERVER_HOST"), values.get(
+    #             "SMTP_SERVER_PORT"), values.get("SENDER_ADDRESS")
+    #     )
+    #     return bool(
+    #         values.get("SMTP_SERVER_HOST")
+    #         and values.get("SMTP_SERVER_PORT")
+    #         and values.get("SENDER_ADDRESS")
+    #     )
 
     EMAIL_TEST_USER: EmailStr = "test@example.com"  # type: ignore
     FIRST_SUPERUSER: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = False
+
 
     class Config:
         case_sensitive = True

@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic.networks import EmailStr
 from sqlalchemy.orm import Session
 
-from app import crud, models, schemas
+from app import crud, models, schemas, constants
 from app.api import deps
 from app.core.config import settings
 from app.utils import send_new_account_email
@@ -150,7 +150,7 @@ def create_user_open(
     user = crud.user.create(db, obj_in=user_in)
     if settings.EMAILS_ENABLED and user_in.email:
         send_new_account_email(
-            email_to=user_in.email, username=user_in.email, password=user_in.password
+            role=constants.role_dict[user_in.role_id], email_to=user_in.email, roll_no=user_in.roll_no, first_name=user_in.first_name, last_name=user_in.last_name
         )
     return user
 

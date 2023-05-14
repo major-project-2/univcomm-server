@@ -6,7 +6,6 @@ from sqlalchemy.orm import relationship
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
-    from .item import Item  # noqa: F401
     from .role import Role
     from .post import Post
     from .question import Question
@@ -26,7 +25,6 @@ class User(Base):
     role_id = Column(Integer, ForeignKey("roles.id"))
 
     role = relationship("Role", back_populates="users")
-    items = relationship("Item", back_populates="owner")
     student_data = relationship("StudentData", uselist=False, back_populates="user")
     faculty_data = relationship("FacultyData", uselist=False, back_populates="user")
     alumni_data = relationship("AlumniData", uselist=False, back_populates="user")

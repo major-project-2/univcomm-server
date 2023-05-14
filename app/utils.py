@@ -3,12 +3,36 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, Optional
 
+import os
+
 import emails
 from emails.template import JinjaTemplate
 from jose import jwt
 
 from app.core.config import settings
 
+
+# def send_email(
+#     email_to: str,
+#     subject_template: str = "",
+#     html_template: str = "",
+#     environment: Dict[str, Any] = {},
+# ) -> None:
+#     assert settings.EMAILS_ENABLED, "no provided configuration for email variables"
+#     message = emails.Message(
+#         subject=JinjaTemplate(subject_template),
+#         html=JinjaTemplate(html_template),
+#         mail_from=(settings.EMAILS_FROM_NAME, settings.EMAILS_FROM_EMAIL),
+#     )
+#     smtp_options = {"host": settings.SMTP_HOST, "port": settings.SMTP_PORT}
+#     if settings.SMTP_TLS:
+#         smtp_options["tls"] = True
+#     if settings.SMTP_USER:
+#         smtp_options["user"] = settings.SMTP_USER
+#     if settings.SMTP_PASSWORD:
+#         smtp_options["password"] = settings.SMTP_PASSWORD
+#     response = message.send(to=email_to, render=environment, smtp=smtp_options)
+#     logging.info(f"send email result: {response}")
 
 def send_email(
     email_to: str,
@@ -20,15 +44,14 @@ def send_email(
     message = emails.Message(
         subject=JinjaTemplate(subject_template),
         html=JinjaTemplate(html_template),
-        mail_from=(settings.EMAILS_FROM_NAME, settings.EMAILS_FROM_EMAIL),
+        mail_from=(settings.SENDER_NAME, settings.SENDER_ADDRESS),
     )
-    smtp_options = {"host": settings.SMTP_HOST, "port": settings.SMTP_PORT}
-    if settings.SMTP_TLS:
-        smtp_options["tls"] = True
-    if settings.SMTP_USER:
-        smtp_options["user"] = settings.SMTP_USER
-    if settings.SMTP_PASSWORD:
-        smtp_options["password"] = settings.SMTP_PASSWORD
+    smtp_options = {"host": settings.SMTP_SERVER_HOST,
+                    "port": settings.SMTP_SERVER_PORT}
+    if settings.SENDER_ADDRESS:
+        smtp_options["user"] = settings.SENDER_ADDRESS
+    if settings.SENDER_PASSWORD:
+        smtp_options["password"] = settings.SENDER_PASSWORD
     response = message.send(to=email_to, render=environment, smtp=smtp_options)
     logging.info(f"send email result: {response}")
 
@@ -67,21 +90,40 @@ def send_reset_password_email(email_to: str, email: str, token: str) -> None:
     )
 
 
-def send_new_account_email(email_to: str, username: str, password: str) -> None:
+# def send_new_account_email(email_to: str, username: str, password: str) -> None:
+#     project_name = settings.PROJECT_NAME
+#     subject = f"{project_name} - New account for user {username}"
+#     with open(Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html") as f:
+#         template_str = f.read()
+#     link = settings.SERVER_HOST
+#     send_email(
+#         email_to=email_to,
+#         subject_template=subject,
+#         html_template=template_str,
+#         environment={
+#             "project_name": settings.PROJECT_NAME,
+#             "username": username,
+#             "password": password,
+#             "email": email_to,
+#             "link": link,
+#         },
+#     )
+
+def send_new_account_email(role: str, email_to: str, roll_no: str, first_name: str, last_name: str) -> None:
     project_name = settings.PROJECT_NAME
-    subject = f"{project_name} - New account for user {username}"
+    subject = f"{project_name} - New {role} account for {first_name} {last_name} ({roll_no})"
     with open(Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html") as f:
         template_str = f.read()
-    link = settings.SERVER_HOST
+    link = "https://www.google.com"  # login link
     send_email(
         email_to=email_to,
         subject_template=subject,
         html_template=template_str,
         environment={
             "project_name": settings.PROJECT_NAME,
-            "username": username,
-            "password": password,
             "email": email_to,
+            "roll_no": roll_no,
+            "role": role,
             "link": link,
         },
     )
