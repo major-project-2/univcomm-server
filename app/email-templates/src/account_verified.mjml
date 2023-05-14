@@ -13,8 +13,9 @@
         <mj-text font-size="16px" >Roll No.: {{ roll_no }}</mj-text>
         <mj-text font-size="16px" >Role: {{ role }}</mj-text>
         <mj-text font-weight="bold" font-size="20px"
-          >Kindly contact the Admin to verify your account.</mj-text
+          >Your account with the above details has been verified by the administrator. You can log in now.</mj-text
         >
+        <mj-button href="{{ link }}">Log in</mj-button>
         <mj-divider border-color="#555" />
       </mj-column>
     </mj-section>

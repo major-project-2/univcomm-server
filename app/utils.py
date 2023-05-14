@@ -114,6 +114,23 @@ def send_new_account_email(role: str, email_to: str, roll_no: str, first_name: s
     subject = f"{project_name} - New {role} account for {first_name} {last_name} ({roll_no})"
     with open(Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html") as f:
         template_str = f.read()
+    send_email(
+        email_to=email_to,
+        subject_template=subject,
+        html_template=template_str,
+        environment={
+            "project_name": settings.PROJECT_NAME,
+            "email": email_to,
+            "roll_no": roll_no,
+            "role": role,
+        },
+    )
+
+def send_account_verified_email(role: str, email_to: str, roll_no: str, first_name: str, last_name: str) -> None:
+    project_name = settings.PROJECT_NAME
+    subject = f"{project_name} - {role} account verified for {first_name} {last_name} ({roll_no})"
+    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "account_verified.html") as f:
+        template_str = f.read()
     link = "https://www.google.com"  # login link
     send_email(
         email_to=email_to,
@@ -127,7 +144,6 @@ def send_new_account_email(role: str, email_to: str, roll_no: str, first_name: s
             "link": link,
         },
     )
-
 
 def generate_password_reset_token(email: str) -> str:
     delta = timedelta(hours=settings.EMAIL_RESET_TOKEN_EXPIRE_HOURS)

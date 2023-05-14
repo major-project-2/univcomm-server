@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from app import crud, models, schemas, constants
 from app.api import deps
 from app.core.config import settings
-from app.utils import send_new_account_email
+from app.utils import send_new_account_email, send_account_verified_email
 
 router = APIRouter()
 
@@ -80,8 +80,8 @@ def create_user(
     user_in.is_verified = True
     user = crud.user.create(db, obj_in=user_in)
     if settings.EMAILS_ENABLED and user_in.email:
-        send_new_account_email(
-            email_to=user_in.email, username=user_in.email, password=user_in.password
+        send_account_verified_email(
+            role=constants.role_dict[user_in.role_id], email_to=user_in.email, roll_no=user_in.roll_no, first_name=user_in.first_name, last_name=user_in.last_name
         )
     return user
 
@@ -304,7 +304,7 @@ def create_alumni_experience(
     return alumni_experience
 
 
-@router.patch('/verify/{user_id}')
+@router.patch('/verify/{user_id}', response_model=schemas.User)
 async def verify_user(
     *,
     db: Session = Depends(deps.get_db),
@@ -321,10 +321,14 @@ async def verify_user(
             detail="The user does not exist in the system",
         )
     user = crud.user.verify(db, db_obj=user)
+    if settings.EMAILS_ENABLED and user.email:
+        send_account_verified_email(
+            role=constants.role_dict[user.role_id], email_to=user.email, roll_no=user.roll_no, first_name=user.first_name, last_name=user.last_name
+        )
     return user
 
 
-@router.patch('/activate/{user_id}')
+@router.patch('/activate/{user_id}', response_model=schemas.User)
 async def activate_user(
     *,
     db: Session = Depends(deps.get_db),
@@ -344,7 +348,7 @@ async def activate_user(
     return user
 
 
-@router.patch('/deactivate/{user_id}')
+@router.patch('/deactivate/{user_id}', response_model=schemas.User)
 async def deactivate_user(
     *,
     db: Session = Depends(deps.get_db),
