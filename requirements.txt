@@ -8,7 +8,7 @@ python-jose
 passlib
 emails
 python-multipart
-celery
+celery[redis]
 alembic
 tenacity
 bcrypt
@@ -16,3 +16,6 @@ jinja2
 pytest
 httpx
 websockets
+flower
+redis
+tensorflow
