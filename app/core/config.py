@@ -96,6 +96,9 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = False
 
+    CELERY_BROKER_URL: str = "redis://default:redispw@localhost:6379/1"
+    CELERY_RESULT_BACKEND: str = "redis://default:redispw@localhost:6379/2"
+
 
     class Config:
         case_sensitive = True
