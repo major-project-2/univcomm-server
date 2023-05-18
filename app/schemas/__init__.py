@@ -1,6 +1,6 @@
 from .token import Token, TokenPayload
 from .user import User, UserCreate, UserInDB, UserUpdate
-from .role import Role, RoleCreate, RoleUpdate
+from .role import Role, RoleCreate, RoleUpdate, RoleBase
 from .login import LoginIn
 from .response import Response
 from .student_data import StudentData, StudentDataCreate, StudentDataInDB, StudentDataUpdate

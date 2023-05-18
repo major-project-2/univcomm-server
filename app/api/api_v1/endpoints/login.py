@@ -41,6 +41,7 @@ def login_access_token(
         "token_type": "bearer",
     }
 
+
 @router.post("/login", response_model=schemas.Token)
 def login(
     db: Session = Depends(deps.get_db), *, form_data: schemas.LoginIn
@@ -56,9 +57,10 @@ def login(
     elif not crud.user.is_active(user):
         raise HTTPException(status_code=400, detail="Inactive user")
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+
     return {
         "access_token": security.create_access_token(
-            user.id, expires_delta=access_token_expires
+            subject=user.id, name=f'{user.first_name} {user.last_name}',  expires_delta=access_token_expires
         ),
         "token_type": "bearer",
     }
@@ -70,6 +72,14 @@ def test_token(current_user: models.User = Depends(deps.get_current_user)) -> An
     Test access token
     """
     return current_user
+
+
+@router.get("/get-role", response_model=schemas.RoleBase)
+def get_role(current_user: models.User = Depends(deps.get_current_user)) -> Any:
+    """
+    Get current logged in user role
+    """
+    return {"role": current_user.role_id}
 
 
 @router.post("/password-recovery/{email}", response_model=schemas.Response)
