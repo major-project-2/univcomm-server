@@ -9,3 +9,5 @@ from .post import Post
 from .comment import Comment
 from .question import Question
 from .answer import Answer
+from .announcement import Announcement
+from .announcement_file import AnnouncementFile

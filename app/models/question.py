@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
+from datetime import datetime
+
 
 from app.db.base_class import Base
 
@@ -17,3 +19,5 @@ class Question(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", back_populates="questions")
     answers = relationship("Answer", back_populates="question", cascade="all, delete")
+
+    created_at = Column(DateTime(timezone=True), default=datetime.now())

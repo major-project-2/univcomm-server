@@ -2,6 +2,8 @@ from typing import Optional
 
 from pydantic import BaseModel, EmailStr
 
+from datetime import datetime
+
 
 # Shared properties
 class UserBase(BaseModel):
@@ -30,7 +32,8 @@ class UserUpdate(UserBase):
 
 
 class UserInDBBase(UserBase):
-    id: Optional[int] = None
+    id: int
+    created_at: datetime
 
     class Config:
         orm_mode = True

@@ -2,6 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+from datetime import datetime
 
 # Shared properties
 class PostBase(BaseModel):
@@ -26,6 +27,7 @@ class PostInDBBase(PostBase):
     title: str
     content: str
     user_id: int
+    created_at: datetime
 
     class Config:
         orm_mode = True

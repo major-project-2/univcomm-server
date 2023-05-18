@@ -2,6 +2,8 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+from datetime import datetime
+
 
 # Shared properties
 class AnswerBase(BaseModel):
@@ -24,6 +26,7 @@ class AnswerInDBBase(AnswerBase):
     answer: str
     question_id: int
     user_id: int
+    created_at: datetime
 
     class Config:
         orm_mode = True
