@@ -35,7 +35,7 @@ class AnnouncementInDBBase(AnnouncementBase):
 
 
 # Properties to return to client
-class (AnnouncementInDBBase):
+class Announcement(AnnouncementInDBBase):
     pass
 
 

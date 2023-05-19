@@ -12,3 +12,7 @@ from .post import Post, PostCreate, PostInDB, PostUpdate
 from .comment import Comment, CommentCreate, CommentInDB, CommentUpdate
 from .question import Question, QuestionCreate, QuestionInDB, QuestionUpdate
 from .answer import Answer, AnswerCreate, AnswerInDB, AnswerUpdate
+from .announcement import Announcement, AnnouncementCreate, AnnouncementInDB, AnnouncementUpdate
+from .announcement_file import AnnouncementFile, AnnouncementFileCreate, AnnouncementFileInDB, AnnouncementFileUpdate
+from .post_file import PostFile, PostFileCreate, PostFileInDB, PostFileUpdate
+from .question_file import QuestionFile, QuestionFileCreate, QuestionFileInDB, QuestionFileUpdate
