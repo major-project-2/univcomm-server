@@ -17,6 +17,3 @@ pytest
 httpx
 websockets
 flower
-redis
-tensorflow
-python-multipart

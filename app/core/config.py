@@ -99,6 +99,7 @@ class Settings(BaseSettings):
     CELERY_BROKER_URL: str = "redis://default:redispw@localhost:6379/1"
     CELERY_RESULT_BACKEND: str = "redis://default:redispw@localhost:6379/2"
 
+    FLOWER_BASIC_AUTH: str
 
     class Config:
         case_sensitive = True
