@@ -1,8 +1,10 @@
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel
 
 from datetime import datetime
+
+from .announcement_file import AnnouncementFile
 
 # Shared properties
 
@@ -36,6 +38,7 @@ class AnnouncementInDBBase(AnnouncementBase):
 
 # Properties to return to client
 class Announcement(AnnouncementInDBBase):
+    announcement_files: List[AnnouncementFile]
     pass
 
 
