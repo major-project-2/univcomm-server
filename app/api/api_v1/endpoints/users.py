@@ -260,7 +260,7 @@ def create_alumni_data(
     return alumni_data
 
 
-@router.post("/data/faculty/experience", response_model=schemas.AlumniExperience, dependencies=[Depends(deps.check_verified_user)])
+@router.post("/data/faculty/experience", response_model=schemas.FacultyExperience, dependencies=[Depends(deps.check_verified_user)])
 def create_faculty_experience(
     *,
     db: Session = Depends(deps.get_db),
