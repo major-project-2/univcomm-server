@@ -75,7 +75,7 @@ def read_announcement(
 
 
 @router.delete("/{id}", response_model=schemas.Announcement)
-def delete_post(
+def delete_announcement(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
