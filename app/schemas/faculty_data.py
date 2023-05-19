@@ -1,6 +1,8 @@
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel
+
+from .faculty_experience import FacultyExperience
 
 
 # Shared properties
@@ -30,7 +32,7 @@ class FacultyDataInDBBase(FacultyDataBase):
 
 # Properties to return to client
 class FacultyData(FacultyDataInDBBase):
-    pass
+    experiences: List[FacultyExperience]
 
 
 # Properties stored in DB
