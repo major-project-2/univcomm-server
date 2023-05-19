@@ -11,3 +11,5 @@ from .question import Question
 from .answer import Answer
 from .announcement import Announcement
 from .announcement_file import AnnouncementFile
+from .post_file import PostFile
+from .question_file import QuestionFile
