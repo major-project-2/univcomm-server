@@ -19,13 +19,22 @@ def read_posts(
     """
     Retrieve posts.
     """
-    role_obj = crud.role.get_current_user_role(db, user=current_user)
-    if crud.user.is_superuser(role=role_obj.role):
-        posts = crud.post.get_multi(db, skip=skip, limit=limit)
-    else:
-        posts = crud.post.get_multi_by_user(
-            db=db, user_id=current_user.id, skip=skip, limit=limit
-        )
+    posts = crud.post.get_multi(db, skip=skip, limit=limit)
+    return posts
+
+
+@router.get("/user", response_model=List[schemas.Question], dependencies=[Depends(deps.check_verified_user)])
+def read_posts_by_user(
+    db: Session = Depends(deps.get_db),
+    skip: int = 0,
+    limit: int = 100,
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Retrieve posts by user.
+    """
+    posts = crud.question.get_multi_by_user(
+        db, user_id=current_user.id, skip=skip, limit=limit)
     return posts
 
 
@@ -78,10 +87,6 @@ def read_post(
     post = crud.post.get(db=db, id=id)
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
-
-    role_obj = crud.role.get_current_user_role(db, user=current_user)
-    if not crud.user.is_superuser(role=role_obj.role) and (post.user_id != current_user.id):
-        raise HTTPException(status_code=400, detail="Not enough permissions")
 
     return post
 

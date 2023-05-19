@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 @router.get("/", response_model=List[schemas.Answer], dependencies=[Depends(deps.check_verified_user)])
-def read_answers(
+def read_answers_by_question(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
@@ -19,16 +19,26 @@ def read_answers(
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Retrieve answers.
+    Retrieve answers by question.
     """
-    role_obj = crud.role.get_current_user_role(db, user=current_user)
-    if crud.user.is_superuser(role=role_obj.role):
-        answers = crud.answer.get_multi(
-            db, question_id=question_id, skip=skip, limit=limit)
-    else:
-        answers = crud.answer.get_multi_by_user(
-            db=db, question_id=question_id, user_id=current_user.id, skip=skip, limit=limit
-        )
+    answers = crud.answer.get_multi(
+        db, question_id=question_id, skip=skip, limit=limit)
+    return answers
+
+
+@router.get("/user", response_model=List[schemas.Answer], dependencies=[Depends(deps.check_verified_user)])
+def read_answers_by_user(
+    db: Session = Depends(deps.get_db),
+    skip: int = 0,
+    limit: int = 100,
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Retrieve answers by user.
+    """
+    answers = crud.answer.get_multi_by_user(
+        db=db, user_id=current_user.id, skip=skip, limit=limit
+    )
     return answers
 
 

@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from datetime import datetime
 
 from .question_file import QuestionFile
+from .answer import Answer
 
 
 # Shared properties
@@ -36,6 +37,7 @@ class QuestionInDBBase(QuestionBase):
 # Properties to return to client
 class Question(QuestionInDBBase):
     question_files: List[QuestionFile]
+    answers: List[Answer]
 
 
 # Properties stored in DB

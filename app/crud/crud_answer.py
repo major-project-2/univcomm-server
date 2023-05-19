@@ -31,11 +31,10 @@ class CRUDAnswer(CRUDBase[Answer, AnswerCreate, AnswerUpdate]):
         )
 
     def get_multi_by_user(
-        self, db: Session, *, question_id: int, user_id: int, skip: int = 0, limit: int = 100
+        self, db: Session, *, user_id: int, skip: int = 0, limit: int = 100
     ) -> List[Answer]:
         return (
             db.query(self.model)
-            .filter(Answer.question_id == question_id)
             .filter(Answer.user_id == user_id)
             .offset(skip)
             .limit(limit)

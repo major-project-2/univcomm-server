@@ -34,4 +34,4 @@ class User(Base):
     comments = relationship("Comment", back_populates="user")
     answers = relationship("Answer", back_populates="user")
 
-    created_at = Column(DateTime(timezone=True), default=datetime.now())
+    created_at = Column(DateTime(timezone=True), default=datetime.now)

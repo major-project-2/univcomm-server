@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from datetime import datetime
 
 from .post_file import PostFile
+from .comment import Comment
 
 # Shared properties
 
@@ -40,6 +41,7 @@ class PostInDBBase(PostBase):
 # Properties to return to client
 class Post(PostInDBBase):
     post_files: List[PostFile]
+    comments: List[Comment]
 
 
 # Properties stored in DB

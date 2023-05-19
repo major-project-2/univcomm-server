@@ -22,4 +22,4 @@ class Comment(Base):
     post = relationship("Post", back_populates="comments")
     user = relationship("User", back_populates="comments")
 
-    created_at = Column(DateTime(timezone=True), default=datetime.now())
+    created_at = Column(DateTime(timezone=True), default=datetime.now)

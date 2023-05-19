@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 @router.get("/", response_model=List[schemas.Comment], dependencies=[Depends(deps.check_verified_user)])
-def read_comments(
+def read_comments_by_post(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
@@ -19,15 +19,26 @@ def read_comments(
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Retrieve comments.
+    Retrieve comments by post.
     """
-    role_obj = crud.role.get_current_user_role(db, user=current_user)
-    if crud.user.is_superuser(role=role_obj.role):
-        comments = crud.comment.get_multi(db, post_id=post_id, skip=skip, limit=limit)
-    else:
-        comments = crud.comment.get_multi_by_user(
-            db=db, post_id=post_id, user_id=current_user.id, skip=skip, limit=limit
-        )
+    comments = crud.comment.get_multi(
+        db, post_id=post_id, skip=skip, limit=limit)
+    return comments
+
+
+@router.get("/user", response_model=List[schemas.Comment], dependencies=[Depends(deps.check_verified_user)])
+def read_comments_by_user(
+    db: Session = Depends(deps.get_db),
+    skip: int = 0,
+    limit: int = 100,
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Retrieve comments by user.
+    """
+    comments = crud.comment.get_multi_by_user(
+        db=db, user_id=current_user.id, skip=skip, limit=limit
+    )
     return comments
 
 

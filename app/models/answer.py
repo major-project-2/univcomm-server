@@ -22,4 +22,4 @@ class Answer(Base):
     question = relationship("Question", back_populates="answers")
     user = relationship("User", back_populates="answers")
 
-    created_at = Column(DateTime(timezone=True), default=datetime.now())
+    created_at = Column(DateTime(timezone=True), default=datetime.now)

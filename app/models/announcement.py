@@ -17,4 +17,4 @@ class Announcement(Base):
     announcement_files = relationship(
         "AnnouncementFile", back_populates="announcement", cascade="all, delete")
 
-    created_at = Column(DateTime(timezone=True), default=datetime.now())
+    created_at = Column(DateTime(timezone=True), default=datetime.now)

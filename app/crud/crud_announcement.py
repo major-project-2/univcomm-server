@@ -22,6 +22,7 @@ class CRUDAnnouncement(CRUDBase[Announcement, AnnouncementCreate, AnnouncementUp
     ) -> List[Announcement]:
         return (
             db.query(self.model)
+            .order_by(self.model.created_at.desc())
             .offset(skip)
             .limit(limit)
             .all()
