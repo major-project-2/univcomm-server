@@ -9,6 +9,10 @@ from .crud_post import post
 from .crud_comment import comment
 from .crud_question import question
 from .crud_answer import answer
+from .crud_announcement import announcement
+from .crud_announcement_file import announcement_file
+from .crud_post_file import post_file
+from .crud_question_file import question_file
 
 # For a new basic set of CRUD operations you could just do
 
