@@ -39,7 +39,6 @@ class AnnouncementInDBBase(AnnouncementBase):
 # Properties to return to client
 class Announcement(AnnouncementInDBBase):
     announcement_files: List[AnnouncementFile]
-    pass
 
 
 # Properties stored in DB

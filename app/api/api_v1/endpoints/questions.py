@@ -107,3 +107,23 @@ def delete_question(
 
     question = crud.question.remove(db=db, id=id)
     return question
+
+
+@router.post('/{question_id}/files', response_model=schemas.QuestionFile)
+def create_question_file(
+    *,
+    db: Session = Depends(deps.get_db),
+    question_id: int,
+    question_file_in: schemas.QuestionFileCreate,
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Create new question file.
+    """
+    question = crud.question.get(db=db, id=question_id)
+    if not question:
+        raise HTTPException(status_code=404, detail="Question not found")
+
+    question_file = crud.question_file.create_with_question(
+        db=db, obj_in=question_file_in, question_id=question_id)
+    return question_file

@@ -1,10 +1,14 @@
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel
 
 from datetime import datetime
 
+from .post_file import PostFile
+
 # Shared properties
+
+
 class PostBase(BaseModel):
     title: Optional[str] = None
     content: Optional[str] = None
@@ -35,7 +39,7 @@ class PostInDBBase(PostBase):
 
 # Properties to return to client
 class Post(PostInDBBase):
-    pass
+    post_files: List[PostFile]
 
 
 # Properties stored in DB

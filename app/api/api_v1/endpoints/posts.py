@@ -106,3 +106,23 @@ def delete_post(
 
     post = crud.post.remove(db=db, id=id)
     return post
+
+
+@router.post('/{post_id}/files', response_model=schemas.PostFile)
+def create_post_file(
+    *,
+    db: Session = Depends(deps.get_db),
+    post_id: int,
+    post_file_in: schemas.PostFileCreate,
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Create new post file.
+    """
+    post = crud.post.get(db=db, id=post_id)
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    post_file = crud.post_file.create_with_post(
+        db=db, obj_in=post_file_in, post_id=post_id)
+    return post_file

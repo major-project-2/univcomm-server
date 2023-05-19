@@ -90,3 +90,23 @@ def delete_announcement(
 
     announcement = crud.announcement.remove(db=db, id=id)
     return announcement
+
+
+@router.post('/{announcement_id}/files', response_model=schemas.AnnouncementFile)
+def create_announcement_file(
+    *,
+    db: Session = Depends(deps.get_db),
+    announcement_id: int,
+    announcement_file_in: schemas.AnnouncementFileCreate,
+    current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Create new announcement file.
+    """
+    announcement = crud.announcement.get(db=db, id=announcement_id)
+    if not announcement:
+        raise HTTPException(status_code=404, detail="Announcement not found")
+
+    announcement_file = crud.announcement_file.create_with_announcement(
+        db=db, obj_in=announcement_file_in, announcement_id=announcement_id)
+    return announcement_file

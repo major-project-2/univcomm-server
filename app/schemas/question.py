@@ -1,8 +1,10 @@
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel
 
 from datetime import datetime
+
+from .question_file import QuestionFile
 
 
 # Shared properties
@@ -33,7 +35,7 @@ class QuestionInDBBase(QuestionBase):
 
 # Properties to return to client
 class Question(QuestionInDBBase):
-    pass
+    question_files: List[QuestionFile]
 
 
 # Properties stored in DB
