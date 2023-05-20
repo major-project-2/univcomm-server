@@ -132,3 +132,54 @@ def create_question_file(
     question_file = crud.question_file.create_with_question(
         db=db, obj_in=question_file_in, question_id=question_id)
     return question_file
+
+
+@router.post('/{question_id}/hand-raise', response_model=schemas.HandRaise, dependencies=[Depends(deps.check_verified_user)])
+def create_hand_raise(
+    *,
+    db: Session = Depends(deps.get_db),
+    question_id: int,
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Create new hand raise.
+    """
+    question = crud.question.get(db=db, id=question_id)
+    if not question:
+        raise HTTPException(status_code=404, detail="Question not found")
+
+    question_hand_raise = crud.hand_raise.get_by_question_user(
+        db=db, question_id=question_id, user_id=current_user.id)
+
+    if question_hand_raise:
+        raise HTTPException(
+            status_code=400, detail="You can only raise your hands once, on a question")
+
+    question_hand_raise = crud.hand_raise.create_with_question_user(
+        db=db, question_id=question_id, user_id=current_user.id)
+    return question_hand_raise
+
+
+@router.delete("/{question_id}/hand-raise", response_model=schemas.HandRaise, dependencies=[Depends(deps.check_verified_user)])
+def delete_hand_raise(
+    *,
+    db: Session = Depends(deps.get_db),
+    question_id: int,
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Delete hand raise.
+    """
+    question_hand_raise = crud.hand_raise.get_by_question_user(
+        db=db, question_id=question_id, user_id=current_user.id)
+
+    if not question_hand_raise:
+        raise HTTPException(
+            status_code=400, detail="You have not raised your hand for this question")
+
+    if question_hand_raise.user_id != current_user.id:
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+
+    question_hand_raise = crud.hand_raise.remove_by_question_user(
+        db=db, question_id=question_id, user_id=current_user.id)
+    return question_hand_raise

@@ -16,3 +16,4 @@ from .announcement import Announcement, AnnouncementCreate, AnnouncementInDB, An
 from .announcement_file import AnnouncementFile, AnnouncementFileCreate, AnnouncementFileInDB, AnnouncementFileUpdate
 from .post_file import PostFile, PostFileCreate, PostFileInDB, PostFileUpdate
 from .question_file import QuestionFile, QuestionFileCreate, QuestionFileInDB, QuestionFileUpdate
+from .hand_raise import HandRaise, HandRaiseCreate, HandRaiseInDB, HandRaiseUpdate
