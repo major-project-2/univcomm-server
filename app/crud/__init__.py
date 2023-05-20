@@ -14,6 +14,8 @@ from .crud_announcement_file import announcement_file
 from .crud_post_file import post_file
 from .crud_question_file import question_file
 from .crud_hand_raise import hand_raise
+from .crud_upvote import upvote
+from .crud_downvote import downvote
 
 # For a new basic set of CRUD operations you could just do
 
