@@ -46,6 +46,17 @@ class Post(PostInDBBase):
     user_upvotes: List[User]
     user_downvotes: List[User]
 
+# Properties to return to client
+
+
+class Posts(PostInDBBase):
+    post_files: List[PostFile]
+    comments: List[Comment]
+    user_upvotes: List[User]
+    user_downvotes: List[User]
+    user_upvoted: bool
+    user_downvoted: bool
+
 
 # Properties stored in DB
 class PostInDB(PostInDBBase):
