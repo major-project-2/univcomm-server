@@ -17,3 +17,5 @@ from .announcement_file import AnnouncementFile, AnnouncementFileCreate, Announc
 from .post_file import PostFile, PostFileCreate, PostFileInDB, PostFileUpdate
 from .question_file import QuestionFile, QuestionFileCreate, QuestionFileInDB, QuestionFileUpdate
 from .hand_raise import HandRaise, HandRaiseCreate, HandRaiseInDB, HandRaiseUpdate
+from .upvote import Upvote, UpvoteCreate, UpvoteInDB, UpvoteUpdate
+from .downvote import Downvote, DownvoteCreate, DownvoteInDB, DownvoteUpdate
