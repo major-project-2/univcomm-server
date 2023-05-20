@@ -13,3 +13,4 @@ from .question_file import QuestionFile
 from .answer import Answer
 from .announcement import Announcement
 from .announcement_file import AnnouncementFile
+from .hand_raise import HandRaise

@@ -1,15 +1,15 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from sqlalchemy import Boolean, Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped
 from datetime import datetime
 
 from app.db.base_class import Base
 
+
 if TYPE_CHECKING:
     from .role import Role
     from .post import Post
-    from .question import Question
 
 
 class User(Base):
@@ -33,5 +33,8 @@ class User(Base):
     questions = relationship("Question", back_populates="user")
     comments = relationship("Comment", back_populates="user")
     answers = relationship("Answer", back_populates="user")
+    question_raises: Mapped[List["Question"]] = relationship(
+        secondary="hand_raises", back_populates="user_raises"
+    )
 
     created_at = Column(DateTime(timezone=True), default=datetime.now)

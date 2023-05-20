@@ -1,14 +1,14 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped
 from datetime import datetime
 
 
 from app.db.base_class import Base
 
+
 if TYPE_CHECKING:
-    from .user import User  # noqa: F401
     from .answer import Answer
 
 
@@ -24,5 +24,9 @@ class Question(Base):
 
     question_files = relationship(
         "QuestionFile", back_populates="question", cascade="all, delete")
+
+    user_raises: Mapped[List["User"]] = relationship(
+        secondary="hand_raises", back_populates="question_raises"
+    )
 
     created_at = Column(DateTime(timezone=True), default=datetime.now)
