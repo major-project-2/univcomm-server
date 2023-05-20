@@ -1,9 +1,8 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped
 from datetime import datetime
-from sqlalchemy.sql import func
 
 
 from app.db.base_class import Base
@@ -24,5 +23,13 @@ class Post(Base):
 
     post_files = relationship(
         "PostFile", back_populates="post", cascade="all, delete")
+    
+    user_upvotes: Mapped[List["User"]] = relationship(
+        secondary="upvotes", back_populates="post_upvotes", cascade="all, delete"
+    )
+
+    user_downvotes: Mapped[List["User"]] = relationship(
+        secondary="downvotes", back_populates="post_downvotes", cascade="all, delete"
+    )
 
     created_at = Column(DateTime(timezone=True), default=datetime.now)

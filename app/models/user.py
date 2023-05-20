@@ -36,5 +36,11 @@ class User(Base):
     question_raises: Mapped[List["Question"]] = relationship(
         secondary="hand_raises", back_populates="user_raises"
     )
+    post_upvotes: Mapped[List["Post"]] = relationship(
+        secondary="upvotes", back_populates="user_upvotes"
+    )
+    post_downvotes: Mapped[List["Post"]] = relationship(
+        secondary="downvotes", back_populates="user_downvotes"
+    )
 
     created_at = Column(DateTime(timezone=True), default=datetime.now)
