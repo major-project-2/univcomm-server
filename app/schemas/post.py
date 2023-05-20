@@ -6,6 +6,7 @@ from datetime import datetime
 
 from .post_file import PostFile
 from .comment import Comment
+from .user import User
 
 # Shared properties
 
@@ -42,6 +43,8 @@ class PostInDBBase(PostBase):
 class Post(PostInDBBase):
     post_files: List[PostFile]
     comments: List[Comment]
+    user_upvotes: List[User]
+    user_downvotes: List[User]
 
 
 # Properties stored in DB
