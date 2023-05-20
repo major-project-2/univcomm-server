@@ -13,5 +13,5 @@ if TYPE_CHECKING:
 class HandRaise(Base):
     __tablename__ = "hand_raises"
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
-    question_id = Column(Integer, ForeignKey("questions.id"),
+    question_id = Column(Integer, ForeignKey("questions.id", ondelete="CASCADE"),
                          primary_key=True)

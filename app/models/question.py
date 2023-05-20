@@ -26,7 +26,7 @@ class Question(Base):
         "QuestionFile", back_populates="question", cascade="all, delete")
 
     user_raises: Mapped[List["User"]] = relationship(
-        secondary="hand_raises", back_populates="question_raises"
+        secondary="hand_raises", back_populates="question_raises", cascade="all, delete"
     )
 
     created_at = Column(DateTime(timezone=True), default=datetime.now)

@@ -6,6 +6,7 @@ from datetime import datetime
 
 from .question_file import QuestionFile
 from .answer import Answer
+from .user import User
 
 
 # Shared properties
@@ -38,6 +39,7 @@ class QuestionInDBBase(QuestionBase):
 class Question(QuestionInDBBase):
     question_files: List[QuestionFile]
     answers: List[Answer]
+    user_raises: List[User]
 
 
 # Properties stored in DB
