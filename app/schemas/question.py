@@ -41,6 +41,15 @@ class Question(QuestionInDBBase):
     answers: List[Answer]
     user_raises: List[User]
 
+# Properties to return to client
+
+
+class Questions(QuestionInDBBase):
+    question_files: List[QuestionFile]
+    answers: List[Answer]
+    user_raises: List[User]
+    user_hand_raised: bool
+
 
 # Properties stored in DB
 class QuestionInDB(QuestionInDBBase):

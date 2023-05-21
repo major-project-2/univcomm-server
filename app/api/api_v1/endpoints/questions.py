@@ -9,7 +9,7 @@ from app.api import deps
 router = APIRouter()
 
 
-@router.get("/", response_model=List[schemas.Question], dependencies=[Depends(deps.check_verified_user)])
+@router.get("/", response_model=List[schemas.Questions], dependencies=[Depends(deps.check_verified_user)])
 def read_questions(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
@@ -20,10 +20,18 @@ def read_questions(
     Retrieve questions.
     """
     questions = crud.question.get_multi(db, skip=skip, limit=limit)
+
+    for q in questions:
+        user_hand_raised = False
+        for u in q.user_raises:
+            if u.id == current_user.id:
+                user_hand_raised = True
+        q.user_hand_raised = user_hand_raised
+
     return questions
 
 
-@router.get("/user", response_model=List[schemas.Question], dependencies=[Depends(deps.check_verified_user)])
+@router.get("/user", response_model=List[schemas.Questions], dependencies=[Depends(deps.check_verified_user)])
 def read_questions_by_user(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
@@ -35,6 +43,14 @@ def read_questions_by_user(
     """
     questions = crud.question.get_multi_by_user(
         db, user_id=current_user.id, skip=skip, limit=limit)
+
+    for q in questions:
+        user_hand_raised = False
+        for u in q.user_raises:
+            if u.id == current_user.id:
+                user_hand_raised = True
+        q.user_hand_raised = user_hand_raised
+
     return questions
 
 
@@ -88,6 +104,12 @@ def read_question(
     question = crud.question.get(db=db, id=id)
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
+
+    user_hand_raised = False
+    for u in question.user_raises:
+        if u.id == current_user.id:
+            user_hand_raised = True
+    question.user_hand_raised = user_hand_raised
 
     return question
 

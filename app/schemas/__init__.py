@@ -10,7 +10,7 @@ from .faculty_experience import FacultyExperience, FacultyExperienceCreate, Facu
 from .alumni_experience import AlumniExperience, AlumniExperienceCreate, AlumniExperienceInDB, AlumniExperienceUpdate
 from .post import Post, PostCreate, PostInDB, PostUpdate, Posts
 from .comment import Comment, CommentCreate, CommentInDB, CommentUpdate
-from .question import Question, QuestionCreate, QuestionInDB, QuestionUpdate
+from .question import Question, QuestionCreate, QuestionInDB, QuestionUpdate, Questions
 from .answer import Answer, AnswerCreate, AnswerInDB, AnswerUpdate
 from .announcement import Announcement, AnnouncementCreate, AnnouncementInDB, AnnouncementUpdate
 from .announcement_file import AnnouncementFile, AnnouncementFileCreate, AnnouncementFileInDB, AnnouncementFileUpdate

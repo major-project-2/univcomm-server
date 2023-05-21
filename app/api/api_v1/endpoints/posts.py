@@ -99,7 +99,7 @@ def update_post(
     return post
 
 
-@router.get("/{id}", response_model=schemas.Post, dependencies=[Depends(deps.check_verified_user)])
+@router.get("/{id}", response_model=schemas.Posts, dependencies=[Depends(deps.check_verified_user)])
 def read_post(
     *,
     db: Session = Depends(deps.get_db),
@@ -112,6 +112,17 @@ def read_post(
     post = crud.post.get(db=db, id=id)
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
+
+    user_upvoted = False
+    user_downvoted = False
+    for u in post.user_upvotes:
+        if u.id == current_user.id:
+            user_upvoted = True
+    for u in post.user_downvotes:
+        if u.id == current_user.id:
+            user_downvoted = True
+    post.user_upvoted = user_upvoted
+    post.user_downvoted = user_downvoted
 
     return post
 
