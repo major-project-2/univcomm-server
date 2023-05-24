@@ -20,6 +20,7 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     email: EmailStr
     password: str
+    confirm_password: str
     first_name: str
     last_name: str
     roll_no: str
@@ -29,6 +30,7 @@ class UserCreate(UserBase):
 # Properties to receive via API on update
 class UserUpdate(UserBase):
     password: Optional[str] = None
+
 
 
 class UserInDBBase(UserBase):

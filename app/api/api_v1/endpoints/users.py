@@ -77,6 +77,13 @@ def create_user(
             status_code=400,
             detail="The user with this roll number already exists in the system.",
         )
+
+    if user_in.password != user_in.confirm_password:
+        raise HTTPException(
+            status_code=400,
+            detail="Passwords does not match.",
+        )
+
     user_in.is_verified = True
     user = crud.user.create(db, obj_in=user_in)
     if settings.EMAILS_ENABLED and user_in.email:
@@ -147,6 +154,13 @@ def create_user_open(
             status_code=400,
             detail="The user with this roll number already exists in the system.",
         )
+
+    if user_in.password != user_in.confirm_password:
+        raise HTTPException(
+            status_code=400,
+            detail="Passwords does not match.",
+        )
+
     user = crud.user.create(db, obj_in=user_in)
     if settings.EMAILS_ENABLED and user_in.email:
         send_new_account_email(
