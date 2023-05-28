@@ -4,3 +4,4 @@ htmlcov
 venv
 .env
 __pycache__
+postgres
