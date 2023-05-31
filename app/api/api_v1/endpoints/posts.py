@@ -46,7 +46,7 @@ def read_posts_by_user(
     """
     Retrieve posts by user.
     """
-    posts = crud.question.get_multi_by_user(
+    posts = crud.post.get_multi_by_user(
         db, user_id=current_user.id, skip=skip, limit=limit)
 
     for p in posts:

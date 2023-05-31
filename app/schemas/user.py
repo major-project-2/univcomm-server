@@ -32,7 +32,6 @@ class UserUpdate(UserBase):
     password: Optional[str] = None
 
 
-
 class UserInDBBase(UserBase):
     id: int
     created_at: datetime
