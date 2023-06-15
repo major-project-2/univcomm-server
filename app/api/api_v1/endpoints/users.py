@@ -229,6 +229,9 @@ def create_student_data(
         )
     student_data = crud.student_data.create_with_user(
         db, obj_in=student_data_in, user_id=current_user.id)
+
+    crud.user.set_is_profile_created(db, db_obj=current_user)
+
     return student_data
 
 
@@ -250,6 +253,9 @@ def create_faculty_data(
         )
     faculty_data = crud.faculty_data.create_with_user(
         db, obj_in=faculty_data_in, user_id=current_user.id)
+
+    crud.user.set_is_profile_created(db, db_obj=current_user)
+
     return faculty_data
 
 
@@ -271,6 +277,9 @@ def create_alumni_data(
         )
     alumni_data = crud.alumni_data.create_with_user(
         db, obj_in=alumni_data_in, user_id=current_user.id)
+
+    crud.user.set_is_profile_created(db, db_obj=current_user)
+
     return alumni_data
 
 

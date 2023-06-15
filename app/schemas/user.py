@@ -10,6 +10,7 @@ class UserBase(BaseModel):
     email: Optional[EmailStr] = None
     is_active: Optional[bool] = True
     is_verified: Optional[bool] = False
+    is_profile_created: Optional[bool] = False
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     roll_no: Optional[str] = None

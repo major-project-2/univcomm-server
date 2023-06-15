@@ -86,6 +86,13 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             return None
         return user
 
+    def set_is_profile_created(self, db: Session, *, db_obj: User) -> User:
+        db_obj.is_profile_created = True
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+
     def is_active(self, user: User) -> bool:
         return user.is_active
 

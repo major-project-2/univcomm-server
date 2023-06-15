@@ -22,6 +22,7 @@ class User(Base):
     roll_no = Column(String, unique=True, index=True, nullable=False)
     is_active = Column(Boolean(), default=True)
     is_verified = Column(Boolean(), default=False)
+    is_profile_created = Column(Boolean(), default=False)
 
     role_id = Column(Integer, ForeignKey("roles.id"))
 
