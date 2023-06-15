@@ -32,23 +32,22 @@ async def websocket_endpoint(
                 "data": {},
                 "message": ""
             }
-            match event:
-                case "ADMIN_CONNECTED":
-                    to_send["message"] = data["message"]
-                    await manager.send_personal_message(to_send, websocket)
-                case "CLIENT_CONNECTED":
-                    to_send["message"] = data["message"]
-                    await manager.send_personal_message(to_send, websocket)
-                case "ACCOUNT_CREATED":
-                    to_send["message"] = data["message"]
-                    to_send['data']['user'] = data['user']
-                    await manager.send_to_admin(to_send)
-                case "ACCOUNT_VERIFIED":
-                    to_send["message"] = data["message"]
-                    to_send['data']['user_id'] = data['user_id']
-                    await manager.send_to_user(to_send)
-                case default:
-                    print("Invalid event")
+            if event == "ADMIN_CONNECTED":
+                to_send["message"] = data["message"]
+                await manager.send_personal_message(to_send, websocket)
+            elif event == "CLIENT_CONNECTED":
+                to_send["message"] = data["message"]
+                await manager.send_personal_message(to_send, websocket)
+            elif event == "ACCOUNT_CREATED":
+                to_send["message"] = data["message"]
+                to_send['data']['user'] = data['user']
+                await manager.send_to_admin(to_send)
+            elif event == "ACCOUNT_VERIFIED":
+                to_send["message"] = data["message"]
+                to_send['data']['user_id'] = data['user_id']
+                await manager.send_to_user(to_send)
+            else:
+                print("Invalid event")
             # await manager.broadcast(f"Broadcast - {constants.role_dict[role_id]} {data}")
             # await manager.broadcastButAdmin(f"Broadcast but Admin - {constants.role_dict[role_id]} {data}")
             # await manager.sendToAdmin(f"Admin - You wrote: {data}")
