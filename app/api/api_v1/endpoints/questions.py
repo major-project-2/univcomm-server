@@ -142,7 +142,7 @@ def create_question_file(
     db: Session = Depends(deps.get_db),
     question_id: int,
     question_file_in: schemas.QuestionFileCreate,
-    current_user: models.User = Depends(deps.get_current_active_superuser),
+    current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Create new question file.

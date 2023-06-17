@@ -155,7 +155,7 @@ def create_post_file(
     db: Session = Depends(deps.get_db),
     post_id: int,
     post_file_in: schemas.PostFileCreate,
-    current_user: models.User = Depends(deps.get_current_active_superuser),
+    current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Create new post file.
