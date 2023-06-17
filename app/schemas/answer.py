@@ -4,6 +4,8 @@ from pydantic import BaseModel
 
 from datetime import datetime
 
+from .user import User
+
 
 # Shared properties
 class AnswerBase(BaseModel):
@@ -26,6 +28,7 @@ class AnswerInDBBase(AnswerBase):
     answer: str
     question_id: int
     user_id: int
+    user: User
     created_at: datetime
 
     class Config:

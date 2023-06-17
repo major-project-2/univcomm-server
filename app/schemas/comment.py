@@ -4,6 +4,8 @@ from pydantic import BaseModel
 
 from datetime import datetime
 
+from .user import User
+
 
 # Shared properties
 class CommentBase(BaseModel):
@@ -26,6 +28,7 @@ class CommentInDBBase(CommentBase):
     comment: str
     post_id: int
     user_id: int
+    user: User
     created_at: datetime
 
     class Config:
